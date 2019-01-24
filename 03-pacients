@@ -1,0 +1,73 @@
+[
+    {
+        "firstname" : "Vladimir",
+        "lastname" : "Pavković",
+        "age" : 41,
+        "history" : [
+            {
+                "disease" : "feaver",
+                "treatment" : "2"
+            },
+            {
+                "disease" : "backpain",
+                "treatment" : "massage"
+            },
+            {
+                "disease" : "legpain",
+                "treatment" : "sport creme"
+            }
+        ]
+    },
+    {
+        "firstname" : "Petar",
+        "lastname" : "Petrović",
+        "age" : 26,
+        "history" : [
+            {
+                "disease" : "backpain",
+                "treatment" : "massage"
+            },
+            {
+                "disease" : "sore throath",
+                "treatment" : "5"
+            }
+        ]
+    },
+    {
+        "firstname" : "Radojko",
+        "lastname" : "Jovanović",
+        "age" : 26,
+        "history" : [
+            {
+                "disease" : "feaver",
+                "treatment" : "2"
+            },
+            {
+                "disease" : "lung pain",
+                "treatment" : "5"
+            },
+            {
+                "disease" : "legpain",
+                "treatment" : 4
+            }
+        ]
+    }
+]
+
+db.pacients.updateOne({"firstname" : "Petar"}, 
+{ 
+    $set: { 
+        "firstname" : "Petras", 
+        "lastname" : "Petrovikis",
+        "history" : [
+            {
+                "disease" : "sore throath",
+                "treatment" : "1"
+            }
+        ] 
+    }
+})
+
+db.pacients.find({ "age" : { "$gt" : 28 } })
+
+db.pacients.deleteMany({ "history.disease":"feaver" })
