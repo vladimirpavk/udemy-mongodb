@@ -19,12 +19,13 @@
     }
 ]
 
+//with validation error
 db.posts.insertOne(
     {
         title : "This is my first post",
         text : "Story about how I wrote my first post.",
         tags : [ "first", "post"],
-        creator : ObjectId("5c4acac36f5e33482799ee37"),
+        creator : 'nikolas',
         comments : [
         {
             author : ObjectId("5c4acac36f5e33482799ee38"),
@@ -45,10 +46,36 @@ db.createCollection('posts', {
                 properties : {
                     'title' : {
                         bsonType : 'string',
-                        descrption: ''
+                        description: 'must be a string and is required...'
+                    },
+                    'text': {
+                        bsonType : 'string',
+                        description: 'must be a string and is required...'
+                    },
+                    'creator': {
+                        bsonType: 'objectId',
+                        description: 'must be a objectid and is required...'
+                    },
+                    'comments': {
+                        bsonType: 'array',
+                        description: 'must be an array and is required...',
+                        items: {
+                            bsonType: 'object',
+                            required: ['text', 'author'],
+                            properties: {
+                                'text': {
+                                    bsonType : 'string',
+                                    description: 'must be a string and is required...'
+                                },
+                                'author': {
+                                    bsonType: 'objectId',
+                                    description: 'must be a objectid and is required...'
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
-    }    
+    }        
 )
