@@ -43,7 +43,7 @@ db.companies.insertMany([
     {
         name: 'ZaječarSoft',
         employees: 5
-    }
+    },
     {
         _id: ObjectId("5c4cd4611091f2c9d1655116"),
         name: 'ZrenjaninSoft',
