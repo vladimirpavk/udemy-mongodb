@@ -1,4 +1,7 @@
-mongoimport tvshows.json -d tvshows -c shows --jsonArray
+//mongoimport tvshows.json -d tvshows -c shows --jsonArray
+
+//mongoimport boxoffice.json -d boxOffice -c movieStarts --jsonArray
+//use boxOffice
 
 db.shows.find({
     "rating.average": { $gt: 9.2 },
@@ -17,8 +20,7 @@ db.shows.find({
     ]
 })
 
-mongoimport boxoffice.json -d boxOffice -c movieStarts --jsonArray
-use boxOffice
+
 
 db.movieStarts.find({
     $or: [
@@ -40,3 +42,43 @@ db.movieStarts.find({
         $gt: ["$visitors", "$expectedVisitors"]
     }
 })
+
+
+db.shows.find({
+    $and: [
+        {
+            "genres": "Action"
+        },
+        {
+            "genres": "Thriller"
+        }
+    ]    
+})
+//the same but with $all operator
+db.shows.find({
+    "genres" : { $all: ["Action", "Thriller"] }
+})
+
+
+//second assigment
+//mongoimport boxoffice-extended.json -d boxOffice -c exmovieStarts --jsonArray
+//use boxOffice
+db.exmoviestarts.find(
+    { 
+        "genre": { $size: 3 }
+    }
+)
+
+db.exmoviestarts.find(
+    {
+        "meta.aired" : 2018
+    }
+)
+
+db.exmoviestarts.find(
+    {
+        "ratings" : {
+            $gt: 8
+        }
+    }
+)
