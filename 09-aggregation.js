@@ -61,8 +61,23 @@ db.persons.aggregate([
             age: "$dob.age",
             geoLocation: {
                 "type": "Point",
-                "coordinates":  ["$location.coordinates.latitude" ,"$location.coordinates.longitude"
-                    
+                "coordinates":  [
+                    {
+                        $convert:{
+                            input: "$location.coordinates.latitude",
+                            to: "double",
+                            onError: 0,
+                            onNull: 0
+                        }
+                    },
+                    {
+                        $convert:{
+                            input: "$location.coordinates.longitude",
+                            to: "double",
+                            onError: 0,
+                            onNull: 0
+                        }
+                    }                    
                 ]
             }           
         }
@@ -87,3 +102,124 @@ db.persons.aggregate([
         }
     }
 ])
+
+db.friends.aggregate([
+    {
+        $unwind: "$hobbies"
+    },
+    {
+        $group: {
+            _id:{
+                "age": "$age"
+            },
+            allHobbies: {$addToSet: "$hobbies"}            
+        }
+    }    
+])
+
+db.friends.aggregate([
+    {
+        $project:{
+            _id: 0,
+            name: 1,
+            hobbies: 1,
+            age: 1,
+            examDifficulty: "$examScores.difficulty"
+        }
+    }
+])
+
+//show only first element in the array
+db.friends.aggregate([
+    {
+        $project:{
+            _id: 0,
+            name: 1,
+            hobbies: 1,
+            age: 1,
+            firstExam: {$slice: ["$examScores", 1]}
+        }
+    }
+])
+
+//the last two -2
+db.friends.aggregate([
+    {
+        $project:{
+            _id: 0,
+            name: 1,
+            hobbies: 1,
+            age: 1,
+            firstExam: {$slice: ["$examScores", -2]}
+        }
+    }
+])
+
+//only second element
+db.friends.aggregate([
+    {
+        $project:{
+            _id: 0,
+            name: 1,
+            hobbies: 1,
+            age: 1,
+            firstExam: {$slice: ["$examScores", 2, 1]}
+        }
+    }
+])
+
+db.friends.aggregate([
+    {
+        $project:{
+            _id: 0,
+            name: 1,
+            hobbies: 1,
+            age: 1,
+            numExams: {$size: "$examScores"}
+        }
+    }
+])
+
+db.friends.aggregate([
+    {
+        $project:{
+            _id: 0,
+            name: 1,
+            hobbies: 1,
+            age: 1,
+            examScores2: {$filter: {
+                input: "$examScores",
+                as: 'eS',
+                cond: {
+                    $gt: ["$$eS.score", 60]
+                }
+            }}
+        }
+    }
+])
+
+db.friends.aggregate([
+    {
+        $unwind: "$examScores"
+    },
+    {
+        $project:{
+            _id: 1,
+            name: 1,
+            age: 1,
+            score: "$examScores.score"
+        }
+    },
+    {
+        $sort: { "score": -1}
+    },
+    {
+        $group:{
+            _id: "$_id",
+            maxScore: {
+                $max: "$score"
+            }     
+        }
+    }   
+])
+
