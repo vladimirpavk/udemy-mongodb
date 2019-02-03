@@ -223,3 +223,19 @@ db.friends.aggregate([
     }   
 ])
 
+db.persons.aggregate([
+    {
+        $bucket:{
+            groupBy: "$dob.age",
+            boundaries: [ 0, 18, 30, 50, 80, 120],
+            output:{
+                numOfPersons: {
+                    $sum: 1
+                },
+                averageAge:{
+                    $avg: "$dob.age"
+                }               
+            }
+        }
+    }
+])
